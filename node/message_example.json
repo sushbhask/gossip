@@ -1,0 +1,9 @@
+{
+  "uuid": "asdf867sad786f",
+  "originating_port": 9999,
+  "version_number": 1,
+  "ttl": 5,
+  "payload": {
+    "abc": "def"
+  }
+}
