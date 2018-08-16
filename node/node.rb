@@ -32,15 +32,17 @@ class Node
   end
 
   def gossip_message_to_peer(message, to_port)
-    response = Unirest.post("http://localhost:#{port}/",
-      from_port: from_port,
-      parameters: {
-        :uuid => message.uuid,
-        :payload => message.payload,
-        :version => message.version,
-        :ttl => message.ttl,
-        :originating_port => message.originating_port,
-      })
+    conn = Faraday.new(:url => "http://localhost:#{to_port}/gossip")
+    response = conn.post do |req|
+      req.headers['Content-Type'] = 'application/json'
+      req.body = {
+        :uuid => message["uuid"],
+        :payload => message["payload"],
+        :version_number => message["version_number"],
+        :ttl => message["ttl"],
+        :originating_port => message["originating_port"],
+      }.to_json
+    end
   end
 
   def receive_message(message)
@@ -58,7 +60,7 @@ class Node
     incoming_version = message["version_number"]
     incoming_port = message["originating_port"]
     current_favorite_book = peers_favorite_books[incoming_port]
-    current_version = current_favorite_book && current_favorite_book["version"]
+    current_version = current_favorite_book && current_favorite_book["version_number"]
     if current_version && current_version >= incoming_version
       puts "Node #{self.port_number} already has the latest info for originating port #{incoming_port}."
     end
@@ -90,7 +92,7 @@ class Node
       self.peers_favorite_books = {}
     end
     self.peers_favorite_books[port] = {
-      "version": response["version_number"],
+      "version_number": response["version_number"],
       "title": response["favorite_book"]
     }
   end

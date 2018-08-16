@@ -22,10 +22,10 @@ get '/peers' do
   node = Node.get_singleton(settings.port)
   return {
     "port_number": node.port_number,
-    "message_history": node.message_history,
     "peers_favorite_books": node.peers_favorite_books,
     "favorite_book": node.favorite_book,
-    "version_number": node.version_number
+    "version_number": node.version_number,
+    "message_history": node.message_history
   }.to_json
 end
 
@@ -40,9 +40,9 @@ get '/' do
   node = Node.get_singleton(settings.port)
   return {
     "port_number": node.port_number,
-    "message_history": node.message_history,
     "peers_favorite_books": node.peers_favorite_books,
     "favorite_book": node.favorite_book,
-    "version_number": node.version_number
+    "version_number": node.version_number,
+    "message_history": node.message_history
   }.to_json
 end
