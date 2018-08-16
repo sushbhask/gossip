@@ -49,12 +49,16 @@ class Node
     # check the message uuid
     # have i received it yet? if so, ignore
     uuid = message["uuid"]
-    for message in message_history do
-      if message["uuid"] == uuid
-        puts "Node #{self.port_number} received duplicate message with uuid #{uuid}."
-        return
-      end
+    uuids_seen = message_history.map { |message|
+      message["uuid"]
+    }
+    if uuids_seen.include?(uuid)
+      puts "Node #{self.port_number} received duplicate message with uuid #{uuid}."
+      return
+    else
+      self.message_history = message_history.push(message)
     end
+
     # if i haven't received it yet, then check what the latest version of the node favorite i have is
     # if i have a later favorte, then ignore it
     incoming_version = message["version_number"]
