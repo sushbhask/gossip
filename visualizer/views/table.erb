@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>Nodes</title>
+  </head>
+  <body>
+    <table>
+      <% @nodes.each |node| do %>
+        <tr>
+          <td><%= node.port_number %></td>
+          <td><%= node.version_number %></td>
+          <td><%= node.favorite_book %></td>
+          <td><%= node.peers_favorite_books %></td>
+        </tr>
+      <% end %>
+    </table>
+  </body>
+</html>
